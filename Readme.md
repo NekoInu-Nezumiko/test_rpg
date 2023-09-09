@@ -35,12 +35,12 @@
 
 ## 6. 操作方法
 
-Move : Arrow Keys
-Attack : Z
-Dash : X
-Status : E
-Check : A
-Save : Check the Statue(像を調べる) 
+- Move : Arrow Keys
+- Attack : Z
+- Dash : X
+- Status : E
+- Check : A
+- Save : Check the Statue(像を調べる) 
 
 
 ## 7. 備考
