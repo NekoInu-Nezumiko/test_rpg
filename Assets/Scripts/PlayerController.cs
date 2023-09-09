@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour{
     [SerializeField]
     private float invincibilityTime;
     private float invincibilityCounter;
+    //点滅関連
+    //private Flash flash;
 
 
     // Start is called before the first frame update
@@ -51,6 +53,7 @@ public class PlayerController : MonoBehaviour{
         activeMoveSpeed = moveSpeed;
         currentStamina = totalStamina;
         GameManager.instance.UpdateStaminaUI();
+        //flash = GetComponent<Flash>(); //点滅関連
     }
 
     // Specによって呼ばれる間隔が異なるのでfpsはほかで制御する
@@ -85,8 +88,9 @@ public class PlayerController : MonoBehaviour{
             Input.GetAxisRaw("Vertical")
             ).normalized * activeMoveSpeed;
 
-        //移動方向でアニメーション変更
+        //移動している場合(移動していないときはanimatorをoffにする)
         if (rb.velocity != Vector2.zero){
+            playerAnim.enabled = true;
             if (Input.GetAxisRaw("Horizontal") != 0) { 
                 if(Input.GetAxisRaw("Horizontal") > 0){
                     playerAnim.SetFloat("X", 1f);
@@ -112,6 +116,8 @@ public class PlayerController : MonoBehaviour{
                 weaponAnim.SetFloat("X", 0);
                 weaponAnim.SetFloat("Y", -1f);
             }
+        }else{
+            playerAnim.enabled = false; //animator_off
         }
 
         //Attack - Z
@@ -159,6 +165,7 @@ public class PlayerController : MonoBehaviour{
     public void DamagePlayer(int damage) {
         //無敵でない場合は攻撃を食らう
         if(invincibilityCounter <= 0) {
+            //flash.PlayFeedBack(); //点滅
             currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
             invincibilityCounter = invincibilityTime;
             SoundManager.instance.PlaySE(1);//被弾

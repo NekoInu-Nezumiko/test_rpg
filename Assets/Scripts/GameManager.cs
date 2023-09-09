@@ -152,11 +152,17 @@ public class GameManager : MonoBehaviour
             player.totalStamina += 5;
             weapon.attackDamage += 2;
 
-            //UI(Instantiateで生成)
-            GameObject levelUp = Instantiate(levelUpText);
-            levelUp.transform.SetParent(canvas.transform); //親を指定
+            //UI(Instantiateで生成 + 場所も指定)
+            GameObject levelUp = Instantiate(levelUpText, player.transform.position, Quaternion.identity);
+            levelUp.transform.SetParent(player.transform); //Playerの動きに合わせてCanvasを動かす
+            /* old */
+            //GameObject levelUp = Instantiate(levelUpText);
+            //levelUp.transform.SetParent(canvas.transform); //親を指定
             //Playerの少し上に表示
-            levelUp.transform.localPosition = player.transform.position + new Vector3(0,100,0); 
+            //levelUp.transform.localPosition = player.transform.position + new Vector3(0,100,0); 
+
+
+
         }
     }
 

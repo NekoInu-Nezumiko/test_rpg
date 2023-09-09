@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour{
     
@@ -30,9 +31,10 @@ public class EnemyController : MonoBehaviour{
     [SerializeField]
     private int attackDamage;
 
-    //HP
+    //HP(fillAmountがfloat型なので)
     [SerializeField]
-    private int currentHealth;
+    private float maxHealth;
+    private float currentHealth;
 
     //Knockback
     private bool isKnockingBack;
@@ -54,6 +56,12 @@ public class EnemyController : MonoBehaviour{
     //与exp
     [SerializeField]
     private int exp;
+    //HP画像
+    [SerializeField]
+    private Image hpImage;
+
+    //点滅
+    //private Flash flash;
 
     void Start(){
         //1. startと同時にEnemyについているRigidbody2Dを受け取る
@@ -63,6 +71,14 @@ public class EnemyController : MonoBehaviour{
         waitCounter = waitTime;
         //3. PlayerのGameObjectを探し、その位置を取得（重い）
         target = GameObject.FindGameObjectWithTag("Player").transform;
+
+        //HPの設定
+        currentHealth = maxHealth;
+        //HP_UI関数の呼び出し
+        UpdateHealthImage();
+
+        //アタッチしたFlash(点滅関連のScript)をflashに格納
+        //flash = GetComponent<Flash>();
 
     }
 
@@ -182,6 +198,10 @@ public class EnemyController : MonoBehaviour{
     */
     public void TakeDamage(int damage, Vector3 position) {
         currentHealth -= damage;
+        //HP画像の更新
+        UpdateHealthImage();
+        //点滅コルーチンの呼び出し
+        //flash.PlayFeedBack(); 
         if (currentHealth <= 0) {
             //死亡時、血を生成
             Instantiate(blood, transform.position, transform.rotation);
@@ -195,6 +215,10 @@ public class EnemyController : MonoBehaviour{
         }else {
             KnockBack(position);
         }
+    }
+    //HP画像の更新(Fill Amount)
+    private void UpdateHealthImage(){
+        hpImage.fillAmount = currentHealth / maxHealth;
     }
 
 }
